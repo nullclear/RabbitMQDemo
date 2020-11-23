@@ -21,7 +21,7 @@ public class RabbitmqConfig {
     @Bean(EXCHANGE_TOPICS_INFORM)
     public Exchange EXCHANGE_TOPICS_INFORM() {
         //durable(true) 持久化，mq重启之后交换机还在
-        return ExchangeBuilder.topicExchange(EXCHANGE_TOPICS_INFORM).durable(true).build();
+        return ExchangeBuilder.topicExchange(EXCHANGE_TOPICS_INFORM).durable(false).build();
     }
 
     //声明QUEUE_INFORM_EMAIL队列

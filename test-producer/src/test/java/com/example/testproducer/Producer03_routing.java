@@ -58,7 +58,7 @@ public class Producer03_routing {
              * 2、交换机的类型
              * fanout：对应的rabbitmq的工作模式是 publish/subscribe
              * direct：对应的Routing	工作模式
-             * topic：对应的Topics工作模式
+             * topic：对应的Topic工作模式
              * headers： 对应的headers工作模式
              */
             channel.exchangeDeclare(EXCHANGE_ROUTING_INFORM, BuiltinExchangeType.DIRECT);
@@ -83,18 +83,18 @@ public class Producer03_routing {
              * 3、props，消息的属性
              * 4、body，消息内容
              */
-           /* for(int i=0;i<5;i++){
+            for (int i = 0; i < 5; i++) {
                 //发送消息的时候指定routingKey
                 String message = "send email inform message to user";
-                channel.basicPublish(EXCHANGE_ROUTING_INFORM,ROUTINGKEY_EMAIL,null,message.getBytes());
-                System.out.println("send to mq "+message);
+                channel.basicPublish(EXCHANGE_ROUTING_INFORM, ROUTINGKEY_EMAIL, null, message.getBytes());
+                System.out.println("send to mq " + message);
             }
-            for(int i=0;i<5;i++){
+            for (int i = 0; i < 5; i++) {
                 //发送消息的时候指定routingKey
                 String message = "send sms inform message to user";
-                channel.basicPublish(EXCHANGE_ROUTING_INFORM,ROUTINGKEY_SMS,null,message.getBytes());
-                System.out.println("send to mq "+message);
-            }*/
+                channel.basicPublish(EXCHANGE_ROUTING_INFORM, ROUTINGKEY_SMS, null, message.getBytes());
+                System.out.println("send to mq " + message);
+            }
             for (int i = 0; i < 5; i++) {
                 //发送消息的时候指定routingKey
                 String message = "send inform message to user";

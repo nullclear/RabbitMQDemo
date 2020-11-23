@@ -64,6 +64,8 @@ public class Consumer01 {
                 //消息内容
                 String message = new String(body, StandardCharsets.UTF_8);
                 System.out.println("receive message:" + message);
+                //手动回复消息
+                channel.basicAck(deliveryTag, true);
             }
         };
 
@@ -75,6 +77,6 @@ public class Consumer01 {
          * 2、autoAck 自动回复，当消费者接收到消息后要告诉mq消息已接收，如果将此参数设置为tru表示会自动回复mq，如果设置为false要通过编程实现回复
          * 3、callback，消费方法，当消费者接收到消息要执行的方法
          */
-        channel.basicConsume(QUEUE, true, defaultConsumer);
+        channel.basicConsume(QUEUE, false, defaultConsumer);
     }
 }

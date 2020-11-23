@@ -16,7 +16,6 @@ public class Consumer02_subscribe_email {
     private static final String QUEUE_INFORM_EMAIL = "queue_inform_email";
     private static final String EXCHANGE_FANOUT_INFORM = "exchange_fanout_inform";
 
-
     public static void main(String[] args) throws IOException, TimeoutException {
         //通过连接工厂创建新的连接和mq建立连接
         ConnectionFactory connectionFactory = new ConnectionFactory();

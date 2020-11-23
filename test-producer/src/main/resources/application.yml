@@ -9,3 +9,6 @@ spring:
     username: guest
     password: guest
     virtualHost: /
+logging:
+  level:
+    org.springframework.boot.autoconfigure: error
