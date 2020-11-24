@@ -29,12 +29,12 @@ public class Producer05_topics_springboot {
          * 3、消息内容
          */
         for (int i = 0; i < 2; i++) {
-            String msg = "send email message to user >>>" + i;
+            String msg = "send email message to user >>> " + i;
 
             //消息内容和属性
             MessageProperties messageProperties = new MessageProperties();
+            messageProperties.setExpiration("20000"); // 设置过期时间，单位：毫秒
             Message message = new Message(msg.getBytes(), messageProperties);
-
             //给关联数据设置ID与消息，假如给把这个ID设置为数据库主键ID，可以在推送成功后落库更改
             CorrelationData data = new CorrelationData(String.valueOf(i));
             data.setReturnedMessage(message);

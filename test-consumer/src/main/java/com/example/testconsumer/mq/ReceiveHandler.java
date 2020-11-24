@@ -25,9 +25,11 @@ public class ReceiveHandler {
     @RabbitListener(queues = {RabbitmqConfig.QUEUE_INFORM_EMAIL})
     public void send_email(String msg, Message message, Channel channel, @Header(name = AmqpHeaders.DELIVERY_TAG) long tag) throws IOException {
         MessageProperties properties = message.getMessageProperties();
-        logger.info("\n [DELIVERY_TAG]->[{}]\n [CONSUMER_TAG]->[{}]\n [RECEIVED_EXCHANGE]->[{}]\n [RECEIVED_ROUTING_KEY]->[{}]",
-                tag, properties.getConsumerTag(), properties.getReceivedExchange(), properties.getReceivedRoutingKey());
+        logger.info("[DELIVERY_TAG]->[{}]", tag);
+        logger.info("[CONSUMER_TAG]->[{}]", properties.getConsumerTag());
+        logger.info("[RECEIVED_EXCHANGE]->[{}]", properties.getReceivedExchange());
+        logger.info("[RECEIVED_ROUTING_KEY]->[{}]", properties.getReceivedRoutingKey());
         logger.warn("receive message is [{}]", msg);
-        channel.basicAck(tag, true);
+        channel.basicAck(tag, false);
     }
 }

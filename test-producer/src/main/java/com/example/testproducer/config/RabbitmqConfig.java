@@ -59,19 +59,22 @@ public class RabbitmqConfig {
     @Bean
     public RabbitTemplate createRabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+        //ConfirmCallback和ReturnCallback接口都只能实现一次
+        //Only one ConfirmCallback is supported by each RabbitTemplate
         //推送消息的结果
         rabbitTemplate.setConfirmCallback(new RabbitTemplate.ConfirmCallback() {
             @Override
             public void confirm(CorrelationData correlationData, boolean ack, String cause) {
                 //correlationData和cause都可以是@Nullable
-                logger.warn("推送消息->[{}]", ack);
                 if (correlationData != null) {
                     String id = correlationData.getId();
                     Message message = correlationData.getReturnedMessage();
-                    String s = null;
-                    if (message != null) s = new String(message.getBody(), StandardCharsets.UTF_8);
-                    logger.warn("ID->[{}] 消息内容->[{}]", id, s);
+                    String body = null;
+                    if (message != null) body = new String(message.getBody(), StandardCharsets.UTF_8);
+                    logger.warn("相关性数据ID->[{}] 消息内容->[{}]", id, body);
                 }
+                logger.warn("推送消息是否成功? ->[{}]", ack);
+                logger.warn("推送消息失败原因: ->[{}]", cause);
             }
         });
         //如果路由器地址错误，或者交换机错误，推送失败的返回
@@ -79,7 +82,11 @@ public class RabbitmqConfig {
         rabbitTemplate.setReturnCallback(new RabbitTemplate.ReturnCallback() {
             @Override
             public void returnedMessage(Message message, int replyCode, String replyText, String exchange, String routingKey) {
-                logger.error("错误回调->[{}]", replyText);
+                logger.error("消息主体: ->[{}]", message);
+                logger.error("回复码: ->[{}]", replyCode);
+                logger.error("回复内容: ->[{}]", replyText);
+                logger.error("消息使用的交换器: ->[{}]", exchange);
+                logger.error("消息使用的路由键: ->[{}]", routingKey);
             }
         });
         return rabbitTemplate;

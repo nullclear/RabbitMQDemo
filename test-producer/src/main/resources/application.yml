@@ -10,6 +10,7 @@ spring:
     password: guest
     virtualHost: /
     publisher-confirm-type: correlated
+    publisher-returns: true
 #    template:
 #      mandatory: true
 logging:
