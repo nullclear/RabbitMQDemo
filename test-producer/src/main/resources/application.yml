@@ -9,6 +9,9 @@ spring:
     username: guest
     password: guest
     virtualHost: /
+    publisher-confirm-type: correlated
+#    template:
+#      mandatory: true
 logging:
   level:
     org.springframework.boot.autoconfigure: error

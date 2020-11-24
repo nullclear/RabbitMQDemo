@@ -9,6 +9,11 @@ spring:
     username: guest
     password: guest
     virtualHost: /
+    listener:
+      simple:
+        acknowledge-mode: manual
+        concurrency: 3
+        prefetch: 3
 logging:
   level:
     org.springframework.boot.autoconfigure: error

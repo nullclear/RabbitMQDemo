@@ -78,5 +78,6 @@ public class Consumer01 {
          * 3、callback，消费方法，当消费者接收到消息要执行的方法
          */
         channel.basicConsume(QUEUE, false, defaultConsumer);
+        channel.basicQos(1);
     }
 }
