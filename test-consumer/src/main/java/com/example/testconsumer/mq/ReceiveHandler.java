@@ -30,6 +30,7 @@ public class ReceiveHandler {
         logger.info("[RECEIVED_EXCHANGE]->[{}]", properties.getReceivedExchange());
         logger.info("[RECEIVED_ROUTING_KEY]->[{}]", properties.getReceivedRoutingKey());
         logger.warn("receive message is [{}]", msg);
+        //当该参数为 true 时，则可以一次性确认 delivery_tag 小于等于传入值的所有消息
         channel.basicAck(tag, false);
     }
 }

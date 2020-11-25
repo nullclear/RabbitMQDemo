@@ -28,11 +28,11 @@ public class RabbitmqConfig {
     //声明交换机
     @Bean(EXCHANGE_TOPICS_INFORM)
     public Exchange EXCHANGE_TOPICS_INFORM() {
-        //durable(true) 持久化，mq重启之后交换机还在
+        //durable(true) 持久化，mq重启之后交换机还在，默认是true
         return ExchangeBuilder.topicExchange(EXCHANGE_TOPICS_INFORM).durable(false).build();
     }
 
-    //声明QUEUE_INFORM_EMAIL队列
+    //声明QUEUE_INFORM_EMAIL队列，默认持久化为true
     @Bean(QUEUE_INFORM_EMAIL)
     public Queue QUEUE_INFORM_EMAIL() {
         return new Queue(QUEUE_INFORM_EMAIL);
@@ -72,6 +72,16 @@ public class RabbitmqConfig {
                     String body = null;
                     if (message != null) body = new String(message.getBody(), StandardCharsets.UTF_8);
                     logger.warn("相关性数据ID->[{}] 消息内容->[{}]", id, body);
+                    if (message != null) {
+                        MessageProperties properties = message.getMessageProperties();
+                        String messageId = properties.getMessageId();
+                        logger.error("消息ID: ->[{}]", messageId);
+                        String exchange = properties.getReceivedExchange();
+                        String routingKey = properties.getReceivedRoutingKey();
+                        //需要在发送时自己设置
+                        logger.warn("消息使用的交换器: ->[{}]", exchange);
+                        logger.warn("消息使用的路由键: ->[{}]", routingKey);
+                    }
                 }
                 logger.warn("推送消息是否成功? ->[{}]", ack);
                 logger.warn("推送消息失败原因: ->[{}]", cause);
@@ -89,6 +99,8 @@ public class RabbitmqConfig {
                 logger.error("消息使用的路由键: ->[{}]", routingKey);
             }
         });
+        //不能和confirm一起用
+        //rabbitTemplate.setChannelTransacted(true);
         return rabbitTemplate;
     }
 }

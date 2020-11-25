@@ -12,6 +12,8 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.UUID;
+
 /**
  * @author Administrator
  * @version 1.0
@@ -36,14 +38,17 @@ public class Producer05_topics_springboot {
 
             //消息内容和属性
             MessageProperties messageProperties = new MessageProperties();
+            messageProperties.setMessageId(UUID.randomUUID().toString());
             messageProperties.setDeliveryMode(MessageDeliveryMode.NON_PERSISTENT);
             messageProperties.setExpiration("20000"); // 设置过期时间，单位：毫秒
+            messageProperties.setReceivedExchange(RabbitmqConfig.EXCHANGE_TOPICS_INFORM);
+            messageProperties.setReceivedRoutingKey("inform.email");
             Message message = new Message(msg.getBytes(), messageProperties);
             //给关联数据设置ID与消息，假如给把这个ID设置为数据库主键ID，可以在推送成功后落库更改
             CorrelationData data = new CorrelationData(String.valueOf(i));
             data.setReturnedMessage(message);
 
-            rabbitTemplate.convertAndSend(RabbitmqConfig.EXCHANGE_TOPICS_INFORM, "inform.email", msg, data);
+            rabbitTemplate.convertAndSend(RabbitmqConfig.EXCHANGE_TOPICS_INFORM, "inform.email", message, data);
         }
         Thread.sleep(5000);
     }
